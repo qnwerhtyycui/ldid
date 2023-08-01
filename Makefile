@@ -4,13 +4,14 @@ else
 VERSION  ?= 2.1.5-procursus7
 endif
 
-CC       ?= cc
-CXX      ?= c++
+CC ?= cc
+CXX ?= c++
+CFLAGS ?= -m32 -I/usr/include/openssl
+CXXFLAGS ?= -m32 -I/usr/include/openssl
 INSTALL  ?= install
 LN       ?= ln
 
 CXXFLAGS ?= -O2 -pipe
-LDFLAGS  ?=
 
 PREFIX   ?= /usr/local
 
@@ -38,10 +39,10 @@ EXT ?=
 all: ldid$(EXT)
 
 %.cpp.o: %.cpp
-	$(CXX) -c -std=c++11 $(CXXFLAGS) $(LIBCRYPTO_INCLUDES) $(LIBPLIST_INCLUDES) $(CPPFLAGS) -I. -DLDID_VERSION=\"$(VERSION)\" $< -o $@
+	$(CXX) -m32 -c -std=c++11 $(CXXFLAGS) $(LIBCRYPTO_INCLUDES) $(LIBPLIST_INCLUDES) $(CPPFLAGS) -I. -DLDID_VERSION=\"$(VERSION)\" $< -o $@
 
 ldid$(EXT): $(SRC:%=%.o)
-	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBCRYPTO_LIBS) $(LIBPLIST_LIBS) $(LIBS)
+	$(CXX) -m32 -o $@ $^ $(LDFLAGS) $(LIBCRYPTO_LIBS) $(LIBPLIST_LIBS) $(LIBS)
 
 install: all
 	$(INSTALL) -d $(DESTDIR)$(BINDIR)/
